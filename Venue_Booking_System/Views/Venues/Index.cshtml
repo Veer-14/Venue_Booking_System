@@ -1,0 +1,51 @@
+﻿@model IEnumerable<VenueBookingSystem.Models.Venue>
+
+@{
+    ViewData["Title"] = "Venues";
+}
+
+<div style="background-color: darkslategray; color: white; padding: 40px; border-radius: 15px; margin-top: 20px;">
+    <div class="text-center mb-4">
+        <h1 class="display-5">Venues</h1>
+
+        <!-- Centered Create Button -->
+        <a class="btn btn-outline-light mt-3" asp-action="Create">+ Create New Venue</a>
+    </div>
+
+    <table class="table table-dark table-striped table-bordered mt-4">
+        <thead class="thead-light">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.VenueName)</th>
+                <th>@Html.DisplayNameFor(model => model.Location)</th>
+                <th>@Html.DisplayNameFor(model => model.Capacity)</th>
+                <th>@Html.DisplayNameFor(model => model.ImageUrl)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.VenueName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Capacity)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="Venue Image" style="width: 150px; height: 100px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span>No Image Available</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-light" asp-action="Edit" asp-route-id="@item.VenueId">Edit</a>
+                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.VenueId">Details</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.VenueId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

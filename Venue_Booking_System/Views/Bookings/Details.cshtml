@@ -1,0 +1,27 @@
+﻿@model Venue_Booking_System.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div style="background-color: darkslategray; color: white; padding: 40px; border-radius: 15px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="text-center mb-4">
+        <h1 class="display-5">Booking Details</h1>
+    </div>
+
+    <dl class="row justify-content-center">
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.Event)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.Event.EventId)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.Venue)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.Venue.Location)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.BookingDate)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.BookingDate)</dd>
+    </dl>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-outline-light" asp-action="Edit" asp-route-id="@Model?.BookingId">Edit</a> |
+        <a class="btn btn-outline-light ms-3" asp-action="Index">Back to List</a>
+    </div>
+</div>

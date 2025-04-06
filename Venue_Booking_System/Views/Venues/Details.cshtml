@@ -1,0 +1,30 @@
+﻿@model VenueBookingSystem.Models.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<div style="background-color: darkslategray; color: white; padding: 40px; border-radius: 15px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="text-center mb-4">
+        <h1 class="display-5">Venue Details</h1>
+    </div>
+
+    <dl class="row justify-content-center">
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.VenueName)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.VenueName)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.Location)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.Location)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.Capacity)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.Capacity)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.ImageUrl)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.ImageUrl)</dd>
+    </dl>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-outline-light" asp-action="Edit" asp-route-id="@Model?.VenueId">Edit</a> |
+        <a class="btn btn-outline-light ms-3" asp-action="Index">Back to List</a>
+    </div>
+</div>

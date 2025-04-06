@@ -1,0 +1,27 @@
+﻿@model Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div style="background-color: darkslategray; color: white; padding: 40px; border-radius: 15px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="text-center mb-4">
+        <h1 class="display-5">Event Details</h1>
+    </div>
+
+    <dl class="row justify-content-center">
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.EventName)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.EventName)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.EventDate)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.EventDate)</dd>
+
+        <dt class="col-sm-4 text-end">@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd class="col-sm-6">@Html.DisplayFor(model => model.Description)</dd>
+    </dl>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-outline-light" asp-action="Edit" asp-route-id="@Model?.EventId">Edit</a> |
+        <a class="btn btn-outline-light ms-3" asp-action="Index">Back to List</a>
+    </div>
+</div>

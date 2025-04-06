@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:Venue_Booking_SystemContext"
+    },
+    "secrets1": {
+      "type": "secrets"
+    }
+  }
+}

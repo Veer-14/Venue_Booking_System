@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Venue_Booking_System</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Venue_Booking_System.styles.css" asp-append-version="true" />
+
+    <!-- Custom Styling -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            color: #333;
+            text-align: center;
+        }
+
+        header, footer {
+            background-color: darkslategray;
+            color: white;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: darkslategrey !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+            .nav-link:hover {
+                background-color: dimgrey;
+                border-radius: 5px;
+            }
+
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        footer a {
+            color: #f0f8ff;
+        }
+
+            footer a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Venue Booking System</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-start">
+                    <ul class="navbar-nav ms-0">
+                        <li class="nav-item mx-3">
+                            <a class="nav-link" asp-area="Views" asp-controller="Venues" asp-action="Index">V E N U E S</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link" asp-area="Views" asp-controller="Events" asp-action="Index">E V E N T S</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="nav-link" asp-area="Views" asp-controller="Bookings" asp-action="Index">B O O K I N G S</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            &copy; 2025 - Venue Booking System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

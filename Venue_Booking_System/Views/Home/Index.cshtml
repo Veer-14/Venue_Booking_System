@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div style="background-color: darkslategray; color: white; padding: 80px 40px; border-radius: 15px; margin-top: 20px;">
+    <div class="text-center">
+        <h1 class="display-4 mb-4">Welcome to the Venue Booking System</h1>
+        <p class="lead mb-5">
+            Manage and explore available <strong>Venues</strong>, <strong>Events</strong>,
+            and <strong>Bookings</strong>.
+        </p>
+
+        <div class="d-flex justify-content-center gap-4">
+            <a class="btn btn-outline-light btn-lg" asp-area="Views" asp-controller="Venues" asp-action="Index">View Venues</a>
+            <a class="btn btn-outline-light btn-lg" asp-area="Views" asp-controller="Events" asp-action="Index">View Events</a>
+            <a class="btn btn-outline-light btn-lg" asp-area="Views" asp-controller="Bookings" asp-action="Index">View Bookings</a>
+        </div>
+    </div>
+</div>
