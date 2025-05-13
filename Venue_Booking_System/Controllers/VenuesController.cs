@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VenueBookingSystem.Models;
 using Venue_Booking_System.Data;
@@ -13,6 +16,9 @@ namespace Venue_Booking_System.Controllers
     public class VenuesController : Controller
     {
         private readonly Venue_Booking_SystemContext _context;
+
+        private readonly string blobConnectionString = "DefaultEndpointsProtocol=https;AccountName=tasveerstorage;AccountKey=JjTEMLdFYS3G8be4ZjJfr8Kk09cUiBM0mzEnYitUXgeg45bpbUP/8nfyUWLbG9zrj4MBK+xhAIEE+AStIH+1Mw==;EndpointSuffix=core.windows.net";
+        private readonly string blobContainerName = "image";
 
         public VenuesController(Venue_Booking_SystemContext context)
         {
@@ -29,16 +35,11 @@ namespace Venue_Booking_System.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var venue = await _context.Venue
-                .FirstOrDefaultAsync(m => m.VenueId == id);
+            var venue = await _context.Venue.FirstOrDefaultAsync(m => m.VenueId == id);
             if (venue == null)
-            {
                 return NotFound();
-            }
 
             return View(venue);
         }
@@ -50,14 +51,18 @@ namespace Venue_Booking_System.Controllers
         }
 
         // POST: Venues/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VenueId,VenueName,Location,Capacity,ImageUrl")] Venue venue)
+        public async Task<IActionResult> Create([Bind("VenueId,VenueName,Location,Capacity")] Venue venue, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string blobUrl = await UploadToBlobAsync(ImageFile);
+                    venue.ImageUrl = blobUrl;
+                }
+
                 _context.Add(venue);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -69,29 +74,22 @@ namespace Venue_Booking_System.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var venue = await _context.Venue.FindAsync(id);
             if (venue == null)
-            {
                 return NotFound();
-            }
+
             return View(venue);
         }
 
         // POST: Venues/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VenueId,VenueName,Location,Capacity,ImageUrl")] Venue venue)
         {
             if (id != venue.VenueId)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -103,13 +101,9 @@ namespace Venue_Booking_System.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!VenueExists(venue.VenueId))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -120,16 +114,11 @@ namespace Venue_Booking_System.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var venue = await _context.Venue
-                .FirstOrDefaultAsync(m => m.VenueId == id);
+            var venue = await _context.Venue.FirstOrDefaultAsync(m => m.VenueId == id);
             if (venue == null)
-            {
                 return NotFound();
-            }
 
             return View(venue);
         }
@@ -139,12 +128,22 @@ namespace Venue_Booking_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venue = await _context.Venue.FindAsync(id);
-            if (venue != null)
+            var venue = await _context.Venue
+                .Include(v => v.Bookings)
+                .FirstOrDefaultAsync(v => v.VenueId == id);
+
+            if (venue == null)
             {
-                _context.Venue.Remove(venue);
+                return NotFound();
             }
 
+            if (venue.Bookings != null && venue.Bookings.Any())
+            {
+                TempData["Error"] = "Cannot delete this venue because it is associated with active bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Venue.Remove(venue);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -152,6 +151,23 @@ namespace Venue_Booking_System.Controllers
         private bool VenueExists(int id)
         {
             return _context.Venue.Any(e => e.VenueId == id);
+        }
+
+        // Upload method
+        private async Task<string> UploadToBlobAsync(IFormFile file)
+        {
+            BlobContainerClient container = new BlobContainerClient(blobConnectionString, blobContainerName);
+            await container.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+            string blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            BlobClient blobClient = container.GetBlobClient(blobName);
+
+            using (var stream = file.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, true);
+            }
+
+            return blobClient.Uri.ToString();
         }
     }
 }

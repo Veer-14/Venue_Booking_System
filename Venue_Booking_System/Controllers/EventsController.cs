@@ -138,12 +138,22 @@ namespace Venue_Booking_System.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @event = await _context.Event.FindAsync(id);
-            if (@event != null)
+            var evnt = await _context.Event
+                .Include(e => e.Bookings)
+                .FirstOrDefaultAsync(e => e.EventId == id);
+
+            if (evnt == null)
             {
-                _context.Event.Remove(@event);
+                return NotFound();
             }
 
+            if (evnt.Bookings != null && evnt.Bookings.Any())
+            {
+                TempData["Error"] = "Cannot delete this event because it is associated with active bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Event.Remove(evnt);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

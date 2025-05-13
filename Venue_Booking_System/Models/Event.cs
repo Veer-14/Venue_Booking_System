@@ -8,11 +8,14 @@ public class Event
     [Key]
     public int EventId { get; set; }
 
+    [Required(ErrorMessage = "Event name is required")]
     public string EventName { get; set; }
 
+    [Required(ErrorMessage = "Venue date is required")]
     public DateTime EventDate { get; set; }
 
-    public string? Description { get; set; }
+    [Required(ErrorMessage = "Event description is required")]
+    public string Description { get; set; }
 
     public List<Booking> Bookings { get; set; } = new();
 }

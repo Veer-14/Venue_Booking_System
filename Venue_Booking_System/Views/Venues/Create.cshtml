@@ -9,7 +9,7 @@
         <h1 class="display-5">Create Venue</h1>
     </div>
 
-    <form asp-action="Create">
+    <form asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="mb-3">
@@ -31,9 +31,8 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="ImageUrl" class="form-label fw-bold"></label>
-            <input asp-for="ImageUrl" class="form-control" />
-            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <label class="form-label fw-bold">Upload Image</label>
+            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
         </div>
 
         <div class="text-center mt-4">
@@ -44,7 +43,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }
